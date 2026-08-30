@@ -29,11 +29,11 @@ def frames():
             break
         frame = cv2.flip(frame, 1)
         frame = detector.find_hands(frame, draw=True)
-        total = detector.count_fingers()
-        gesture = detector.gesture()
+        result = detector.snapshot()
+        total, gesture = result["total"], result["gesture"]
         with state_lock:
-            latest_state.update({"left": detector.hand_counts.get("Left"), "right": detector.hand_counts.get("Right"), "total": total, "mode": total == 10, "gesture": gesture, "hands": detector.hand_points.copy(), "timestamp": time.time()})
-        label = "" if total is None else f"{detector.hand_counts.get('Left', '-')}{detector.hand_counts.get('Right', '-')}"
+            latest_state.update({**result, "mode": total == 10, "hands": detector.hand_points.copy(), "timestamp": time.time()})
+        label = "-" if total is None else f"{result['left'] if result['left'] is not None else '-'}{result['right'] if result['right'] is not None else '-'}"
         frame = ui.draw_hud(frame, total, gesture, label)
         success, encoded = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
         if success:
