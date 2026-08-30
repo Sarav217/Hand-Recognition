@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hand Number Recognition</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:#0b1020;color:#f8fafc;font:16px system-ui,sans-serif;display:grid;place-items:center;padding:24px}
+    main{width:min(960px,100%)}h1{margin:0 0 8px;font-size:clamp(28px,5vw,48px)}p{color:#9ca8c7;margin:0 0 24px}.viewer{overflow:hidden;border:1px solid #334064;border-radius:20px;background:#151d35;box-shadow:0 20px 70px #0006}.viewer img{display:block;width:100%;height:auto}.tip{padding:16px 20px;color:#aeb9d4;font-size:14px}
+  </style>
+</head>
+<body><main><h1>Hand Number Recognition</h1><p>Show 0–5 fingers to your camera.</p><section class="viewer"><img src="{{ url_for('video_feed') }}" alt="Live webcam finger detection"><div class="tip">Live detection · Press Ctrl+C in the terminal to stop the server</div></section></main></body>
+</html>
