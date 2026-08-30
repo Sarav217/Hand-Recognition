@@ -29,6 +29,8 @@ class HandDetector:
         # Deque for smoothing detections
         self.history = collections.deque(maxlen=max(1, smooth_frames))
         self.results = None
+        self.hand_counts = {}
+        self.hand_points = {}
 
     def find_hands(self, img, draw=True):
         """
@@ -58,6 +60,8 @@ class HandDetector:
         
         if self.results and self.results.multi_hand_landmarks and len(self.results.multi_handedness) > 0:
             counts = []
+            self.hand_counts = {}
+            self.hand_points = {}
             for hand_landmarks, hand_info in zip(self.results.multi_hand_landmarks, self.results.multi_handedness):
                 handedness = hand_info.classification[0].label
             
@@ -78,6 +82,8 @@ class HandDetector:
                     fingers.append(int(lm_list[self.tip_ids[id]].y < lm_list[self.tip_ids[id] - 2].y))
                     
                 counts.append(fingers.count(1))
+                self.hand_counts[handedness] = fingers.count(1)
+                self.hand_points[handedness] = {"index": (lm_list[8].x, lm_list[8].y), "thumb": (lm_list[4].x, lm_list[4].y), "index_up": bool(fingers[1]), "thumb_up": bool(fingers[0])}
             current_count = sum(counts)
         
         # Add to history if hand is detected

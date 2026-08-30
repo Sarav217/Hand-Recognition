@@ -18,7 +18,7 @@ class UIOverlay:
     def __init__(self):
         self.p_time = 0
         
-    def draw_hud(self, img, finger_count, gesture=""):
+    def draw_hud(self, img, finger_count, gesture="", label=None):
         """
         Draw a modern, visually attractive overlay on the camera frame.
         """
@@ -38,7 +38,7 @@ class UIOverlay:
         cv2.rectangle(img, (20, 20), (20 + card_w, 20 + card_h), color, 2, cv2.LINE_AA)
         
         # Finger Count Large Text
-        display_text = str(finger_count) if finger_count is not None else "-"
+        display_text = label if label is not None else (str(finger_count) if finger_count is not None else "-")
         # Center the large number visually in the left part of the card
         cv2.putText(img, display_text, (40, 140), cv2.FONT_HERSHEY_DUPLEX, 4, color, 8, cv2.LINE_AA)
         cv2.putText(img, display_text, (40, 140), cv2.FONT_HERSHEY_DUPLEX, 4, (255, 255, 255), 2, cv2.LINE_AA)
