@@ -14,6 +14,10 @@ from ui_overlay import UIOverlay
 
 app = Flask(__name__)
 camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+camera.set(cv2.CAP_PROP_FPS, 30)
+camera.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 detector = HandDetector(max_hands=2, detection_con=0.7, track_con=0.7, smooth_frames=7)
 ui = UIOverlay()
 camera_lock = threading.Lock()
@@ -35,7 +39,7 @@ def frames():
             latest_state.update({**result, "mode": total == 10, "hands": detector.hand_points.copy(), "timestamp": time.time()})
         label = "-" if total is None else f"{result['left'] if result['left'] is not None else '-'}{result['right'] if result['right'] is not None else '-'}"
         frame = ui.draw_hud(frame, total, gesture, label)
-        success, encoded = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+        success, encoded = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 75])
         if success:
             yield (b"--frame\r\nContent-Type: image/jpeg\r\n\r\n" + encoded.tobytes() + b"\r\n")
 
